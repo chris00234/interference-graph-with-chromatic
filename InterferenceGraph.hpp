@@ -7,17 +7,17 @@
 #include <map>
 
 
-//class UnknownVertexException : public std::runtime_error {
-//public:
-//    UnknownVertexException(const std::string& v)
-//        : std::runtime_error("Unknown vertex " + v) {}
-//};
-//
-//class UnknownEdgeException : public std::runtime_error {
-//public:
-//    UnknownEdgeException(const std::string& v, const std::string& w)
-//        : std::runtime_error("Unknown edge " + v + " - " + w) {}
-//};
+class UnknownVertexException : public std::runtime_error {
+public:
+    UnknownVertexException(const std::string& v)
+        : std::runtime_error("Unknown vertex " + v) {}
+};
+
+class UnknownEdgeException : public std::runtime_error {
+public:
+    UnknownEdgeException(const std::string& v, const std::string& w)
+        : std::runtime_error("Unknown edge " + v + " - " + w) {}
+};
 
 // InterferenceGraph
 //
@@ -69,7 +69,7 @@ template <typename T>
 std::unordered_set<T> InterferenceGraph<T>::neighbors(const T& vertex) const {
     if (adjacencyList.find(vertex) == adjacencyList.end())
     {
-        //throw UnKnownVertexException;
+        throw UnKnownVertexException(vertex);
     }
 
     std::unordered_set<T> s;
@@ -103,7 +103,7 @@ void InterferenceGraph<T>::addEdge(const T& v, const T& w)
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-        //throw UnKnownVertexException;
+        throw UnKnownVertexException(v,w);
     }
     adjacencyList.at(v).insert(w);
     adjacencyList.at(w).insert(v);
@@ -116,7 +116,7 @@ void InterferenceGraph<T>::removeEdge(const T& v, const T& w)
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-       // throw UnKnownVertexException;
+       throw UnKnownVertexException(v,w);
     }
     adjacencyList.at(v).erase(w);
     adjacencyList.at(w).erase(v);
@@ -138,7 +138,7 @@ void InterferenceGraph<T>::removeVertex(const T& vertex)
 {
     if (adjacencyList.find(vertex) == adjacencyList.end())
     {
-        // throw UnKnownVertexException;
+        throw UnKnownVertexException(vertex);
     }
     adjacencyList.erase(vertex);
     for (auto it = adjacencyList.begin(); it != adjacencyList.end(); it++)
@@ -153,7 +153,7 @@ bool InterferenceGraph<T>::interferes(const T& v, const T& w) const
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-        //throw UnKnownVertexException;
+        throw UnKnownVertexException(v,w);
     }
     if (adjacencyList.at(v).find(w) != adjacencyList.at(v).end() && adjacencyList.at(w).find(v) != adjacencyList.at(w).end())
         return true;

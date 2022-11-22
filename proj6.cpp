@@ -7,8 +7,6 @@
 #include <vector>
 #include <queue>
 
-//need to be deleted
-#include <iostream>
 
 using namespace proj6;
 
@@ -36,12 +34,7 @@ RegisterAssignment proj6::assignRegisters(const std::string& path_to_graph,
         v.push_back({ *it, ig.degree(*it) });
     }
     std::sort(v.begin(), v.end(), compare);
-    /*for (auto it : v)
-    {
-        std::cout << it.first << " " << it.second << std::endl;
-    }*/
     
-    //need to change inside of while argument
     std::vector<std::pair<Variable, int>> coloring;
     for (int pos = 0; pos < v.size(); pos++)
     {
