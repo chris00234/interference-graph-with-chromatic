@@ -103,7 +103,7 @@ void InterferenceGraph<T>::addEdge(const T& v, const T& w)
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-        throw UnknownVertexException(v,w);
+        throw UnknownEdgeException(v,w);
     }
     adjacencyList.at(v).insert(w);
     adjacencyList.at(w).insert(v);
@@ -116,7 +116,7 @@ void InterferenceGraph<T>::removeEdge(const T& v, const T& w)
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-       throw UnknownVertexException(v,w);
+       throw UnknownEdgeException(v,w);
     }
     adjacencyList.at(v).erase(w);
     adjacencyList.at(w).erase(v);
@@ -153,7 +153,7 @@ bool InterferenceGraph<T>::interferes(const T& v, const T& w) const
 {
     if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
     {
-        throw UnknownVertexException(v,w);
+        throw UnknownEdgeException(v,w);
     }
     if (adjacencyList.at(v).find(w) != adjacencyList.at(v).end() && adjacencyList.at(w).find(v) != adjacencyList.at(w).end())
         return true;
