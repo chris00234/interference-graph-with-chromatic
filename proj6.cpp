@@ -41,7 +41,11 @@ RegisterAssignment proj6::assignRegisters(const std::string& path_to_graph,
         coloring.push_back({ v[pos].first, 0 });
     }
     std::queue<int> q;
-    for (int i = 1; i <= num_registers; i++)
+    int max_degree = v[0].second + 1;
+    if (max_degree >= num_registers)
+        max_degree = num_registers;
+    
+    for (int i = 1; i <= max_degree; i++)
     {
         q.push(i);
     }
@@ -53,8 +57,6 @@ RegisterAssignment proj6::assignRegisters(const std::string& path_to_graph,
     std::unordered_set<Variable> tmp;
     while (!q.empty())
     {
-        /*if (i == ig.numVertices())
-            break;*/
         if (coloring[i].second == 0 && discovered.find(coloring[i].first) == discovered.end())
         {
             discovered.insert(coloring[i].first);
