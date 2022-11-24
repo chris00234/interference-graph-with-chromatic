@@ -138,13 +138,16 @@ void InterferenceGraph<T>::removeVertex(const T& vertex)
 {
     if (adjacencyList.find(vertex) == adjacencyList.end())
     {
-        throw UnknownVertexException(vertex);
+       throw UnknownVertexException(vertex);
     }
     adjacencyList.erase(vertex);
     for (auto it = adjacencyList.begin(); it != adjacencyList.end(); it++)
     {
         if (it->second.find(vertex) != it->second.end())
+        {
             it->second.erase(vertex);
+            num_edge--;
+        }
     }
 }
 
