@@ -25,6 +25,10 @@ bool compare(std::pair<Variable, int> p1, std::pair<Variable, int> p2)
 RegisterAssignment proj6::assignRegisters(const std::string& path_to_graph,
     int num_registers) noexcept {
     InterferenceGraph<Variable> ig = CSVReader::load(path_to_graph);
+
+    std::unordered_map<Variable, int> m;
+    if (ig.numVertices() == 0)
+        return m;
     //sort
     std::unordered_set<Variable> vertices;
     vertices = ig.vertices();
@@ -77,7 +81,7 @@ RegisterAssignment proj6::assignRegisters(const std::string& path_to_graph,
         i++;
         
     }
-    std::unordered_map<Variable, int> m;
+
     for (auto it = coloring.begin(); it != coloring.end(); it++)
     {
         if (it->second == 0)
