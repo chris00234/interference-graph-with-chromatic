@@ -2,6 +2,7 @@
 #define __INTERFERENCE_GRAPH__HPP
 
 #include <exception>
+#include <stdexcept>
 #include <string>
 #include <unordered_set>
 #include <map>
@@ -65,11 +66,12 @@ template <typename T> InterferenceGraph<T>::InterferenceGraph() {}
 
 template <typename T> InterferenceGraph<T>::~InterferenceGraph() {}
 
+//finished
 template <typename T>
 std::unordered_set<T> InterferenceGraph<T>::neighbors(const T& vertex) const {
     if (adjacencyList.find(vertex) == adjacencyList.end())
     {
-        throw UnknownVertexException(vertex);
+       throw UnknownVertexException(vertex);
     }
 
     std::unordered_set<T> s;
@@ -98,23 +100,41 @@ template <typename T> unsigned InterferenceGraph<T>::numEdges() const noexcept
     return num_edge;
 }
 
+//complete
 template <typename T>
 void InterferenceGraph<T>::addEdge(const T& v, const T& w) 
 {
-    if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
+    if (adjacencyList.find(v) == adjacencyList.end())
     {
-        throw UnknownEdgeException(v,w);
+       throw UnknownVertexException(v);
     }
-    adjacencyList.at(v).insert(w);
-    adjacencyList.at(w).insert(v);
-    num_edge++;
+    if (adjacencyList.find(w) == adjacencyList.end())
+    {
+        throw UnknownVertexException(w);
+    }
 
+    if (adjacencyList.at(v).find(w) == adjacencyList.at(v).end() && adjacencyList.at(w).find(v) == adjacencyList.at(w).end())
+    {
+        adjacencyList.at(v).insert(w);
+        adjacencyList.at(w).insert(v);
+        num_edge++;
+    }
 }
 
+
+//complete
 template <typename T>
 void InterferenceGraph<T>::removeEdge(const T& v, const T& w) 
 {
-    if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
+    if (adjacencyList.find(v) == adjacencyList.end())
+    {
+        throw UnknownVertexException(v);
+    }
+    if (adjacencyList.find(w) == adjacencyList.end())
+    {
+        throw UnknownVertexException(w);
+    }
+    if (adjacencyList.at(v).find(w) == adjacencyList.at(v).end() || adjacencyList.at(w).find(v) == adjacencyList.at(w).end())
     {
        throw UnknownEdgeException(v,w);
     }
@@ -133,12 +153,13 @@ void InterferenceGraph<T>::addVertex(const T& vertex) noexcept
     adjacencyList.insert({ vertex,{} });
 }
 
+//complete
 template <typename T>
 void InterferenceGraph<T>::removeVertex(const T& vertex) 
 {
     if (adjacencyList.find(vertex) == adjacencyList.end())
     {
-       throw UnknownVertexException(vertex);
+        throw UnknownVertexException(vertex);
     }
     adjacencyList.erase(vertex);
     for (auto it = adjacencyList.begin(); it != adjacencyList.end(); it++)
@@ -154,10 +175,15 @@ void InterferenceGraph<T>::removeVertex(const T& vertex)
 template <typename T>
 bool InterferenceGraph<T>::interferes(const T& v, const T& w) const 
 {
-    if (adjacencyList.find(v) == adjacencyList.end() || adjacencyList.find(w) == adjacencyList.end())
+    if (adjacencyList.find(v) == adjacencyList.end())
     {
-        throw UnknownEdgeException(v,w);
+       throw UnknownVertexException(v);
     }
+    if (adjacencyList.find(w) == adjacencyList.end())
+    {
+        throw UnknownVertexException(w);
+    }
+
     if (adjacencyList.at(v).find(w) != adjacencyList.at(v).end() && adjacencyList.at(w).find(v) != adjacencyList.at(w).end())
         return true;
     return false;
@@ -166,6 +192,10 @@ bool InterferenceGraph<T>::interferes(const T& v, const T& w) const
 template <typename T>
 unsigned InterferenceGraph<T>::degree(const T& v) const 
 { 
+    if (adjacencyList.find(v) == adjacencyList.end())
+    {
+        throw UnknownVertexException(v);
+    }
     std::unordered_set<T> s;
     s = adjacencyList.at(v);
     unsigned num = 0;
